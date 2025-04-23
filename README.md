@@ -156,7 +156,7 @@ Comments
 
 ## Author
 
-Your Name - [Your GitHub Profile](https://github.com/mehetavi)
+Hetavi Shah - [MeHetavi](https://github.com/mehetavi)
 
 ## Acknowledgments
 
