@@ -28,16 +28,34 @@ const updateUser = async (user, userData) => {
 };
 
 
-const getPostById = (id) => {
-    return Post.findByPk(id, { include: [{ model: postImages, as: 'images' }, { model: Like, as: 'likes' }, { model: Comment, as: 'comments' }] });
-}
 
 const getAllUsers = async () => {
-    const users = await User.findAll({ include: [{ model: Post, as: 'posts', include: [{ model: postImages, as: 'images' }, { model: Like, as: 'likes' }, { model: Comment, as: 'comments' }] }] });;
-    console.log(users)
-    return users
+    try {
+        const users = await User.findAll({ include: [{ model: Post, as: 'posts', include: [{ model: postImages, as: 'images' }, { model: Like, as: 'likes' }, { model: Comment, as: 'comments' }] }] });;
+        console.log(users)
+        return users;
+    } catch (err) {
+        throw err;
+    }
 }
 
+const getPostById = async (id) => {
+    try {
+        const post = await Post.findByPk(id, { include: [{ model: postImages, as: 'images' }, { model: Like, as: 'likes' }, { model: Comment, as: 'comments' }] });
+        return post;
+    } catch (err) {
+        throw err;
+    }
+}
+
+const getAllPosts = async () => {
+    try {
+        const posts = await Post.findAll({ include: [{ model: postImages, as: 'images' }, { model: Like, as: 'likes' }, { model: Comment, as: 'comments' }] });
+        return posts;
+    } catch (err) {
+        throw err;
+    }
+}
 
 const createPost = async (postData) => {
     const t = await sequelize.transaction();
@@ -116,16 +134,40 @@ const createComment = async (commentData) => {
     }
 };
 
+const getCommentsOnPost = async (postId) => {
+    try {
+        const post = await Post.findByPk(postId, { include: [{ model: Comment, as: 'comments' }] });
+        return post?.comments;
+    }
+    catch (err) {
+        throw err;
+    }
+}
+
+const deleteComment = async (id) => {
+
+    try {
+        const posts = await Comment.destroy({ where: { id: id } });
+        return posts;
+    }
+    catch (err) {
+        throw err;
+    }
+}
+
 module.exports = {
     createUser,
     updateUser,
     getUserById,
     getAllUsers,
     getPostById,
+    getAllPosts,
     createPost,
     deletePost,
     editPost,
     createLike,
     removeLike,
-    createComment
+    createComment,
+    getCommentsOnPost,
+    deleteComment
 };

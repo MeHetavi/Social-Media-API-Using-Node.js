@@ -151,6 +151,30 @@ app.put('/post/:id', verifyToken, uploadPosts, async (req, res) => {
     }
 });
 
+
+// GET /posts - Get all posts
+app.get('/posts', verifyToken, async (req, res) => {
+    try {
+        const posts = await db.getAllPosts();
+        res.json(posts);
+    }
+    catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+})
+
+// GET /posts/:id - Get a specific post
+app.get('/posts/:id', verifyToken, async (req, res) => {
+    try {
+        const post = await db.getPostById(req.params.id);
+        res.json(post);
+    }
+    catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+})
+
+
 // DELETE /post -> Delete Post.
 app.delete('/post/:id', verifyToken, async (req, res) => {
     try {
@@ -180,8 +204,13 @@ app.delete('/post/:id', verifyToken, async (req, res) => {
 
 // GET /allUsers
 app.get('/allUsers', verifyToken, async (req, res) => {
-    const users = await db.getAllUsers();
-    res.json(users);
+    try {
+        const users = await db.getAllUsers();
+        res.json(users);
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({ error: error.message });
+    }
 })
 
 // POST /like/:id
@@ -215,20 +244,50 @@ app.delete('/like/:id', verifyToken, async (req, res) => {
         res.json({ 'message': 'Liked removed!' });
     }
     catch (error) {
-        res.status(400).json({ 'message': 'Already Liked!' });
+        res.status(400).json({ 'message': 'Already disliked!' });
     }
 }
 )
 
 // POST /comment/:id
 app.post('/comment/:id', verifyToken, async (req, res) => {
-    const likeData = {
-        forPost: req.params.id,
-        comment: req.body.comment,
-        createdBy: req.user.id
+    try {
+        const likeData = {
+            forPost: req.params.id,
+            comment: req.body.comment,
+            createdBy: req.user.id
+        }
+        const comment = await db.createComment(likeData);
+        res.json({ 'message': 'Commented Successfully!', 'Data': comment });
+    } catch (error) {
+        res.status(400).json({ 'error': error.message });
     }
-    const comment = await db.createComment(likeData);
-    res.json({ 'message': 'Commented Successfully!', 'Data': comment });
+})
+
+
+//         - `GET /comment/:id` - Get comments for a post
+app.get('/comment/:id', verifyToken, async (req, res) => {
+    try {
+        const comments = await db.getCommentsOnPost(req.params.id);
+        if (!comments) {
+            res.status(400).json({ 'message': 'Comments not found!' });
+        }
+        res.json({ message: 'Comments on post with id: ' + req.params.id, comments });
+    } catch (error) {
+        res.status(400).json({ 'error': error.message });
+    }
+})
+//             - `DELETE /comment/:id` - Delete a comment
+app.delete('/comment/:id', verifyToken, async (req, res) => {
+    try {
+        const comment = await db.deleteComment(req.params.id);
+        if (!comment) {
+            res.status(400).json({ 'message': 'Comment not found!' });
+        }
+        res.json({ 'message': 'Comment deleted!' });
+    } catch (error) {
+        res.status(400).json({ 'error': error.message });
+    }
 })
 
 const port = process.env.PORT || 3000;
