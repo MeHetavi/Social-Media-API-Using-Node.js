@@ -71,8 +71,11 @@ Content-Type: application/json
 
 {
   "username": "johndoe",
+  "firstname": "johndoe",
   "email": "john@example.com",
-  "password": "securepassword123"
+  "password": "securepassword123",
+  dob: "1990-01-01",
+  gender: "male"
 }
 ```
 
@@ -83,8 +86,8 @@ Authorization: Bearer <your_jwt_token>
 Content-Type: application/json
 
 {
-  "title": "My First Post",
-  "content": "Hello, this is my first post!"
+  "caption": "My First Post",
+  "image": ["path/to/image.jpg",...]
 }
 ```
 
@@ -111,6 +114,7 @@ The API uses standard HTTP status codes for error handling:
 ```sql
 Users
 - id (PK)
+- fullName
 - username
 - email
 - password
@@ -119,8 +123,9 @@ Users
 
 Posts
 - id (PK)
-- title
-- content
+- caption
+- likes_count
+- comments_count
 - createdBy (FK to Users)
 - createdAt
 - updatedAt
@@ -134,7 +139,7 @@ Likes
 
 Comments
 - id (PK)
-- content
+- comment
 - forPost (FK to Posts)
 - createdBy (FK to Users)
 - createdAt
@@ -149,13 +154,9 @@ Comments
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## Author
 
-Your Name - [Your GitHub Profile](https://github.com/yourusername)
+Your Name - [Your GitHub Profile](https://github.com/mehetavi)
 
 ## Acknowledgments
 
