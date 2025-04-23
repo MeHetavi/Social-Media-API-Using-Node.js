@@ -74,8 +74,8 @@ Content-Type: application/json
   "firstname": "johndoe",
   "email": "john@example.com",
   "password": "securepassword123",
-  dob: "1990-01-01",
-  gender: "male"
+  "dob": "1990-01-01",
+  "gender": "male"
 }
 ```
 
