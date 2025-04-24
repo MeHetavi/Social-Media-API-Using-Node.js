@@ -22,7 +22,7 @@ A RESTful API for a social media platform built with Node.js, Express, and Postg
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/social-media-api.git
+git clone https://github.com/MeHetavi/social-media-api.git
 cd social-media-api
 ```
 
